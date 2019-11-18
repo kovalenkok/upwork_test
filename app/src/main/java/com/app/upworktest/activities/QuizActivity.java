@@ -5,11 +5,12 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.app.upworktest.R;
+import com.app.upworktest.adapters.QuestionsAdapter;
 import com.app.upworktest.models.QuizSession;
 import com.app.upworktest.utils.JSONObjectCreator;
-import com.app.upworktest.utils.UIUtils;
 
 public class QuizActivity extends AppCompatActivity {
 
@@ -31,7 +32,11 @@ public class QuizActivity extends AppCompatActivity {
         // Parse intent extra and get quiz session object.
         String json = getIntent().getStringExtra(EXTRA_QUIZ_SESSION);
         QuizSession session = JSONObjectCreator.createObject(json, QuizSession.class);
-        UIUtils.showMessage(this, String.valueOf(session.questions.size()));
+
+        // Setup quiz view pager.
+        ViewPager2 viewPager = findViewById(R.id.viewPager);
+        viewPager.setAdapter(new QuestionsAdapter(
+                getSupportFragmentManager(), getLifecycle(), session.questions));
     }
 
     @Override

@@ -2,6 +2,7 @@
     <string name="app_name">Quiz App (Pte Ltd)</string>
 
     <!-- Quiz Page String Resources -->
+    <string name="json_failure">Unable to load json file from assets</string>
     <string name="quiz_page_title">QUIZ</string>
     <string name="start_quiz">Start Quiz</string>
 </resources>

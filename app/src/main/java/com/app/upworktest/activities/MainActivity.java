@@ -36,8 +36,7 @@ public class MainActivity extends AppCompatActivity {
                         JSONObjectCreator.createJson(session));
                 startActivity(intent);
             } else {
-                UIUtils.showMessage(MainActivity.this,
-                        "Unable to load json file from assets");
+                UIUtils.showMessage(MainActivity.this, R.string.json_failure);
             }
         });
     }
