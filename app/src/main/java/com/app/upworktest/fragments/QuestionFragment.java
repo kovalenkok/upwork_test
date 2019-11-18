@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,33 +17,25 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.app.upworktest.R;
 import com.app.upworktest.adapters.AnswersAdapter;
 import com.app.upworktest.models.QuizQuestion;
-import com.app.upworktest.utils.JSONObjectCreator;
+import com.app.upworktest.viewmodels.QuizViewModel;
 
 public class QuestionFragment extends Fragment {
 
-    private static final String EXTRA_QUIZ_QUESTION = "EXTRA_QUIZ_QUESTION";
+    private static final String EXTRA_QUESTION_INDEX = "EXTRA_QUESTION_INDEX";
 
+    private QuizViewModel viewModel;
+    private int index;
     private QuizQuestion question;
 
     private TextView tvQuestion;
     private RecyclerView recyclerView;
 
-    public static QuestionFragment newInstance(QuizQuestion question) {
+    public static QuestionFragment newInstance(int index) {
         QuestionFragment fragment = new QuestionFragment();
         Bundle args = new Bundle();
-        args.putString(EXTRA_QUIZ_QUESTION, JSONObjectCreator.createJson(question));
+        args.putInt(EXTRA_QUESTION_INDEX, index);
         fragment.setArguments(args);
         return fragment;
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        if (getArguments() != null) {
-            String json = getArguments().getString(EXTRA_QUIZ_QUESTION);
-            question = JSONObjectCreator.createObject(json, QuizQuestion.class);
-        }
     }
 
     @Nullable
@@ -66,6 +59,15 @@ public class QuestionFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        if (getActivity() != null) {
+            viewModel = new ViewModelProvider(getActivity(),
+                    new ViewModelProvider.NewInstanceFactory()).get(QuizViewModel.class);
+            if (getArguments() != null) {
+                index = getArguments().getInt(EXTRA_QUESTION_INDEX);
+                question = viewModel.getQuestion(index);
+            }
+        }
+
         // Display question text.
         tvQuestion.setText(question.questionText);
 
@@ -76,6 +78,12 @@ public class QuestionFragment extends Fragment {
                     new DividerItemDecoration(getContext(), RecyclerView.VERTICAL));
         }
         AnswersAdapter adapter = new AnswersAdapter(question.answers, question.correctAnswerIndex);
+        adapter.setItemClickListener(answer -> {
+            int answerIndex = adapter.getSelectedAnswerIndex();
+            if (viewModel != null) {
+                viewModel.saveUserAnswer(index, answerIndex);
+            }
+        });
         recyclerView.setAdapter(adapter);
 
     }

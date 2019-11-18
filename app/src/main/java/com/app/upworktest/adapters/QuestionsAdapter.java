@@ -25,7 +25,7 @@ public class QuestionsAdapter extends FragmentStateAdapter {
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        return QuestionFragment.newInstance(questions.get(position));
+        return QuestionFragment.newInstance(position);
     }
 
     @Override

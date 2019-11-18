@@ -19,7 +19,7 @@ public class AnswersAdapter extends RecyclerView.Adapter<AnswersAdapter.AnswerVi
 
     private List<QuizAnswer> answers;
     private BaseItemClickListener<QuizAnswer> itemClickListener;
-    private int correctAnswerIndex = -1;
+    private int correctAnswerIndex;
     private int selection = -1;
 
     public AnswersAdapter(List<QuizAnswer> answers, int correctAnswerIndex) {
@@ -52,10 +52,10 @@ public class AnswersAdapter extends RecyclerView.Adapter<AnswersAdapter.AnswerVi
         holder.bindItem(answers.get(position), selection == position,
                 correctAnswerIndex == position);
         holder.tvAnswer.setOnClickListener(v -> {
-            updateSelection(holder.getAdapterPosition());
             if (itemClickListener != null) {
                 itemClickListener.onItemClicked(answers.get(holder.getAdapterPosition()));
             }
+            updateSelection(holder.getAdapterPosition());
         });
     }
 
