@@ -35,7 +35,7 @@ public class AnswersAdapter extends RecyclerView.Adapter<AnswersAdapter.AnswerVi
         return selection;
     }
 
-    private void updateSelection(int selection) {
+    public void updateSelection(int selection) {
         this.selection = selection;
         notifyDataSetChanged();
     }

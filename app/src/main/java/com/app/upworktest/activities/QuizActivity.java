@@ -1,6 +1,8 @@
 package com.app.upworktest.activities;
 
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -23,6 +25,9 @@ public class QuizActivity extends AppCompatActivity {
 
     private QuizViewModel viewModel;
     private ViewPager2 viewPager;
+    private TextView tvTimer;
+    private CountDownTimer timer;
+    private int timeInSeconds = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -40,6 +45,7 @@ public class QuizActivity extends AppCompatActivity {
         // Initialize class members.
         viewModel = new ViewModelProvider(this,
                 new ViewModelProvider.NewInstanceFactory()).get(QuizViewModel.class);
+        tvTimer = findViewById(R.id.tvTimer);
 
         QuizSession session;
         if (viewModel.getQuizSession() == null) {
@@ -47,8 +53,10 @@ public class QuizActivity extends AppCompatActivity {
             String json = getIntent().getStringExtra(EXTRA_QUIZ_SESSION);
             session = JSONObjectCreator.createObject(json, QuizSession.class);
             viewModel.setQuizSession(session);
+            timeInSeconds = (int) session.totalTime;
         } else {
             session = viewModel.getQuizSession();
+            timeInSeconds = viewModel.getTimeInSeconds();
         }
 
         // Setup quiz view pager.
@@ -56,12 +64,40 @@ public class QuizActivity extends AppCompatActivity {
         viewPager.setAdapter(new QuestionsAdapter(
                 getSupportFragmentManager(), getLifecycle(), session.questions));
         viewPager.setUserInputEnabled(false);
+
+        runTimer();
     }
 
     @Override
     public boolean onSupportNavigateUp() {
         finish();
         return true;
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        viewModel.setTimeInSeconds(timeInSeconds);
+        timer.cancel();
+        timer = null;
+    }
+
+    private void runTimer() {
+        tvTimer.setText(String.format(Locale.getDefault(), "Count: %d", timeInSeconds));
+        timer = new CountDownTimer(timeInSeconds * 1000,
+                1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                timeInSeconds = (int) (millisUntilFinished / 1000);
+                tvTimer.setText(String.format(Locale.getDefault(), "Count: %d", timeInSeconds));
+            }
+
+            @Override
+            public void onFinish() {
+                showQuizScore();
+            }
+        }.start();
     }
 
     public void showNextQuestion() {
@@ -75,6 +111,11 @@ public class QuizActivity extends AppCompatActivity {
     private void showQuizScore() {
         int totalAnswers = viewModel.totalAnswers();
         int corrects = viewModel.getCorrects();
+        String percent = "n/a";
+        if (totalAnswers != 0) {
+            percent = String.format(Locale.getDefault(),
+                    "%.2f%%", (float) corrects / totalAnswers * 100);
+        }
         String builder = "\n" +
                 "Total Answers: " +
                 totalAnswers +
@@ -83,14 +124,11 @@ public class QuizActivity extends AppCompatActivity {
                 corrects +
                 "\n\n" +
                 "Your score: " +
-                String.format(Locale.getDefault(),
-                        "%.2f%%", (float) corrects / totalAnswers * 100);
+                percent;
         new AlertDialog.Builder(this)
                 .setTitle(R.string.review_score)
                 .setMessage(builder)
-                .setPositiveButton("OK", (dialog, which) -> {
-                    finish();
-                })
+                .setPositiveButton("OK", (dialog, which) -> finish())
                 .show();
     }
 

@@ -88,6 +88,9 @@ public class QuestionFragment extends Fragment {
             }
         });
         recyclerView.setAdapter(adapter);
+        if (viewModel.getUserAnswer(index) != -1) {
+            adapter.updateSelection(viewModel.getUserAnswer(index));
+        }
 
         // Setup next question button.
         if (index < viewModel.getQuizSession().questions.size() - 1) {

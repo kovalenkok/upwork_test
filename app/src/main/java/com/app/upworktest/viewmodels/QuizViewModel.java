@@ -8,6 +8,7 @@ import com.app.upworktest.models.QuizSession;
 public class QuizViewModel extends ViewModel {
 
     private QuizSession quizSession;
+    private int timeInSeconds;
 
     public QuizSession getQuizSession() {
         return quizSession;
@@ -23,6 +24,10 @@ public class QuizViewModel extends ViewModel {
 
     public void saveUserAnswer(int questionIndex, int userAnswerIndex) {
         quizSession.questions.get(questionIndex).userAnswerIndex = userAnswerIndex;
+    }
+
+    public int getUserAnswer(int questionIndex) {
+        return quizSession.questions.get(questionIndex).userAnswerIndex;
     }
 
     public int getAnsweredQuestionIndex() {
@@ -54,6 +59,14 @@ public class QuizViewModel extends ViewModel {
             }
         }
         return total;
+    }
+
+    public int getTimeInSeconds() {
+        return timeInSeconds;
+    }
+
+    public void setTimeInSeconds(int timeInSeconds) {
+        this.timeInSeconds = timeInSeconds;
     }
 
 }
