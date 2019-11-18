@@ -52,10 +52,10 @@ public class AnswersAdapter extends RecyclerView.Adapter<AnswersAdapter.AnswerVi
         holder.bindItem(answers.get(position), selection == position,
                 correctAnswerIndex == position);
         holder.tvAnswer.setOnClickListener(v -> {
+            updateSelection(position);
             if (itemClickListener != null) {
-                itemClickListener.onItemClicked(answers.get(holder.getAdapterPosition()));
+                itemClickListener.onItemClicked(answers.get(position));
             }
-            updateSelection(holder.getAdapterPosition());
         });
     }
 

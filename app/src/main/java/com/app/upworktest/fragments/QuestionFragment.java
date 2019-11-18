@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.upworktest.R;
+import com.app.upworktest.activities.QuizActivity;
 import com.app.upworktest.adapters.AnswersAdapter;
 import com.app.upworktest.models.QuizQuestion;
 import com.app.upworktest.viewmodels.QuizViewModel;
@@ -29,6 +30,7 @@ public class QuestionFragment extends Fragment {
 
     private TextView tvQuestion;
     private RecyclerView recyclerView;
+    private TextView btnNext;
 
     public static QuestionFragment newInstance(int index) {
         QuestionFragment fragment = new QuestionFragment();
@@ -53,6 +55,7 @@ public class QuestionFragment extends Fragment {
         // Map view elements to class members.
         tvQuestion = view.findViewById(R.id.tvQuestion);
         recyclerView = view.findViewById(R.id.recyclerView);
+        btnNext = view.findViewById(R.id.btnNext);
     }
 
     @Override
@@ -86,6 +89,17 @@ public class QuestionFragment extends Fragment {
         });
         recyclerView.setAdapter(adapter);
 
+        // Setup next question button.
+        if (index < viewModel.getQuizSession().questions.size() - 1) {
+            btnNext.setText(R.string.next_question);
+        } else {
+            btnNext.setText(R.string.review_score);
+        }
+        btnNext.setOnClickListener(v -> {
+            if (getActivity() instanceof QuizActivity) {
+                ((QuizActivity) getActivity()).showNextQuestion();
+            }
+        });
     }
 
 

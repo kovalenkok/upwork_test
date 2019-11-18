@@ -3,6 +3,7 @@ package com.app.upworktest.activities;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
@@ -14,9 +15,14 @@ import com.app.upworktest.models.QuizSession;
 import com.app.upworktest.utils.JSONObjectCreator;
 import com.app.upworktest.viewmodels.QuizViewModel;
 
+import java.util.Locale;
+
 public class QuizActivity extends AppCompatActivity {
 
     public static final String EXTRA_QUIZ_SESSION = "EXTRA_QUIZ_SESSION";
+
+    private QuizViewModel viewModel;
+    private ViewPager2 viewPager;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -32,7 +38,7 @@ public class QuizActivity extends AppCompatActivity {
         }
 
         // Initialize class members.
-        QuizViewModel viewModel = new ViewModelProvider(this,
+        viewModel = new ViewModelProvider(this,
                 new ViewModelProvider.NewInstanceFactory()).get(QuizViewModel.class);
 
         QuizSession session;
@@ -46,9 +52,10 @@ public class QuizActivity extends AppCompatActivity {
         }
 
         // Setup quiz view pager.
-        ViewPager2 viewPager = findViewById(R.id.viewPager);
+        viewPager = findViewById(R.id.viewPager);
         viewPager.setAdapter(new QuestionsAdapter(
                 getSupportFragmentManager(), getLifecycle(), session.questions));
+        viewPager.setUserInputEnabled(false);
     }
 
     @Override
@@ -56,4 +63,35 @@ public class QuizActivity extends AppCompatActivity {
         finish();
         return true;
     }
+
+    public void showNextQuestion() {
+        if (viewModel.getAnsweredQuestionIndex() != -1) {
+            viewPager.setCurrentItem(viewModel.getAnsweredQuestionIndex());
+        } else {
+            showQuizScore();
+        }
+    }
+
+    private void showQuizScore() {
+        int totalAnswers = viewModel.totalAnswers();
+        int corrects = viewModel.getCorrects();
+        String builder = "\n" +
+                "Total Answers: " +
+                totalAnswers +
+                "\n\n" +
+                "Correct Answers: " +
+                corrects +
+                "\n\n" +
+                "Your score: " +
+                String.format(Locale.getDefault(),
+                        "%.2f%%", (float) corrects / totalAnswers * 100);
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.review_score)
+                .setMessage(builder)
+                .setPositiveButton("OK", (dialog, which) -> {
+                    finish();
+                })
+                .show();
+    }
+
 }

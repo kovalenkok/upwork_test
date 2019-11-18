@@ -8,5 +8,5 @@ public class QuizQuestion {
     public float timestamp;
     public float timecap;
     public List<QuizAnswer> answers;
-    public int userAnswerIndex;
+    public int userAnswerIndex = -1;
 }

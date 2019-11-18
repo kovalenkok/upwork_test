@@ -25,4 +25,35 @@ public class QuizViewModel extends ViewModel {
         quizSession.questions.get(questionIndex).userAnswerIndex = userAnswerIndex;
     }
 
+    public int getAnsweredQuestionIndex() {
+        for (int i = 0; i < quizSession.questions.size(); i++) {
+            if (quizSession.questions.get(i).userAnswerIndex == -1) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public int totalAnswers() {
+        int total = 0;
+        for (QuizQuestion question : quizSession.questions) {
+            if (question.userAnswerIndex != -1) {
+                total++;
+            }
+        }
+        return total;
+    }
+
+    public int getCorrects() {
+        int total = 0;
+        for (QuizQuestion question : quizSession.questions) {
+            if (question.userAnswerIndex != -1) {
+                if (question.userAnswerIndex == question.correctAnswerIndex) {
+                    total++;
+                }
+            }
+        }
+        return total;
+    }
+
 }
