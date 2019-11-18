@@ -3,6 +3,7 @@ package com.app.upworktest.activities;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.app.upworktest.R;
@@ -19,7 +20,9 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(R.string.app_name);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+
+        findViewById(R.id.btnStart).setOnClickListener(v ->
+                startActivity(new Intent(MainActivity.this, QuizActivity.class)));
     }
 }

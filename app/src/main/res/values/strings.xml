@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">Upwork Test</string>
+    <string name="app_name">Quiz App (Pte Ltd)</string>
+
+    <!-- Quiz Page String Resources -->
+    <string name="quiz_page_title">QUIZ</string>
+    <string name="start_quiz">Start Quiz</string>
 </resources>

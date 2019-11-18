@@ -17,24 +17,4 @@
             app:theme="@style/AppToolbarTheme"
             app:titleTextAppearance="@style/AppTheme.Toolbar.Title" />
     </com.google.android.material.appbar.AppBarLayout>
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <TextView
-            android:id="@+id/btnStart"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:background="@drawable/dr_selector_start"
-            android:paddingStart="32dp"
-            android:paddingTop="6dp"
-            android:paddingEnd="32dp"
-            android:paddingBottom="6dp"
-            android:text="@string/start_quiz"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-    </FrameLayout>
 </LinearLayout>

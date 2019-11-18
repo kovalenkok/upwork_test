@@ -1,0 +1,65 @@
+{
+  "totalTime": 20.0,
+  "questions": [
+    {
+      "timestamp": 2.0,
+      "questionText": "Question 1",
+      "answers": [
+        {
+          "answerText": "Answer 1 (correct one)"
+        },
+        {
+          "answerText": "Answer 2"
+        },
+        {
+          "answerText": "Answer 3"
+        },
+        {
+          "answerText": "Answer 4"
+        }
+      ],
+      "correctAnswerIndex": 0,
+      "timecap": 4.0
+    },
+    {
+      "timestamp": 8.0,
+      "questionText": "Question 2",
+      "answers": [
+        {
+          "answerText": "Answer 1"
+        },
+        {
+          "answerText": "Answer 2 (correct one)"
+        },
+        {
+          "answerText": "Answer 3"
+        },
+        {
+          "answerText": "Answer 4"
+        }
+      ],
+      "correctAnswerIndex": 1,
+      "timecap": 5.0
+    },
+    {
+      "timestamp": 15.0,
+      "questionText": "Question 3",
+      "answers": [
+        {
+          "answerText": "Answer 1"
+        },
+        {
+          "answerText": "Answer 2"
+        },
+        {
+          "answerText": "Answer 3"
+        },
+        {
+          "answerText": "Answer 4 (correct one)"
+        }
+      ],
+      "correctAnswerIndex": 3,
+      "timecap": 3.0
+    }
+  ]
+}
